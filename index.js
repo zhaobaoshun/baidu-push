@@ -388,4 +388,43 @@ Push.prototype.pushMsg = function (options, cb) {
   });
 }
 
+Push.prototype.setTag = function (options, cb) {
+  var self = this;
+  var opt = {};
+  if (typeof options === 'function' && arguments.length === 1) {
+    cb = options;
+    options = {}
+  }
+
+  if (!options) {
+    options = {}
+  }
+
+  for (var i in options) {
+    if (options.hasOwnProperty(i)) {
+      opt[i] = options[i];
+    }
+  }
+
+  var must = ['tag'];
+  checkOptions(opt, must);
+
+  var path = COMMON_PATH + 'channel';
+
+  opt['method'] = 'set_tag';
+  opt['apikey'] = self.ak;
+  opt['timestamp'] = getTimestamp();
+
+  opt = sortObj(opt);
+  var wrap_id = {request_id: null};
+  request(opt, path, self.sk, wrap_id, self.host, function (err, result) {
+    self.request_id = wrap_id.request_id;
+    if (err) {
+      cb && cb(err);
+      return;
+    }
+    cb && cb(null, result);
+  });
+}
+
 module.exports = Push;
