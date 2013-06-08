@@ -84,9 +84,6 @@ function getSign(method, url, params, sk) {
     baseStr += sk;
     //var encodeStr = encodeURIComponent(baseStr);
     var encodeStr = urlencode(baseStr);
-    if (debug) {
-        console.log('getSign: base str = ' + baseStr + ', encode str = ' + encodeStr);
-    }
 
     var md5sum = crypto.createHash('md5');
     md5sum.update(encodeStr);
@@ -116,12 +113,7 @@ function request(bodyArgs, path, sk, id, host, cb) {
         }
     }
     var bodyStr = bodyArgsArray.join('&');
-
     //var bodyStr = querystring.stringify(bodyArgs);
-
-    if (debug) {
-        console.log('body length = ' + bodyStr.length + ', body str = ' + bodyStr);
-    }
 
     var options = {
         host: host,
@@ -133,22 +125,12 @@ function request(bodyArgs, path, sk, id, host, cb) {
     };
 
     var req = http.request(options, function (res) {
-        if (debug) {
-            console.log('status = ' + res.statusCode);
-            console.log('res header = ');
-            console.dir(res.headers);
-        }
-
         var resBody = '';
         res.on('data', function (chunk) {
             resBody += chunk;
         });
 
         res.on('end', function () {
-            if (debug) {
-                console.log('res body: ' + resBody);
-            }
-
             //var jsonObj = JSON.parse(resBody);
              try {
               var jsonObj = JSON.parse(resBody);
@@ -159,27 +141,22 @@ function request(bodyArgs, path, sk, id, host, cb) {
             var errObj = null;
             id.request_id = jsonObj['request_id'];
             if (res.statusCode != 200) {
-
                 var error_code = 'Unknown';
                 if (jsonObj['error_code'] !== undefined) {
                     error_code = jsonObj['error_code'];
                 }
-
                 var error_msg = 'Unknown';
                 if (jsonObj['error_msg'] !== undefined) {
                     error_msg = jsonObj['error_msg'];
                 }
-
                 var request_id = 'Unknown';
                 if (jsonObj['error_msg'] !== undefined) {
                     request_id = jsonObj['request_id'];
                 }
-
                 errObj = new Error('Push error code: ' + error_code +
                                     ', error msg: ' + error_msg +
                                     ', request id: ' + request_id);
             }
-
             cb(errObj, jsonObj);
         });
     });
@@ -190,7 +167,6 @@ function request(bodyArgs, path, sk, id, host, cb) {
         }
         cb(e, null);
     });
-
     req.write(bodyStr);
     req.end();
 }
