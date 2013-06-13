@@ -1,4 +1,3 @@
-new-baidu-push
-==========
+### baidu-push
 
 node.js sdk for baidu push service
