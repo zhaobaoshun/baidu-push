@@ -7,12 +7,12 @@ var PROTOCOL_SCHEMA = 'http://';
 var SERVER_HOST = 'channel.api.duapp.com';
 var COMMON_PATH = '/rest/2.0/channel/';
 
-function urlencode (str) {
+function urlencode (string) {
   // http://kevin.vanzonneveld.net
-  str = (str + '').toString();
+  string = (string + '').toString();
   // Tilde should be allowed unescaped in future versions of PHP (as reflected below), but if you want to reflect current
   // PHP behavior, you would need to add ".replace(/~/g, '%7E');" to the following.
-  return encodeURIComponent(str).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
+  return encodeURIComponent(string).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
 }
 function getTimestamp() {
   var timestamp = Math.floor(new Date().getTime() / 1000);
@@ -26,6 +26,7 @@ function sortObject(originObject) {
       index.push(i);
     }
   }
+
   index.sort();
 
   for(i = 0; i < index.length; i++) {
@@ -91,19 +92,7 @@ function request(bodyArgs, path, sk, id, host, callback) {
       var errObj = null;
       id.request_id = jsonObj['request_id'];
       if (res.statusCode != 200) {
-        var error_code = 'Unknown';
-        if (jsonObj['error_code'] !== undefined) {
-          error_code = jsonObj['error_code'];
-        }
-        var error_msg = 'Unknown';
-        if (jsonObj['error_msg'] !== undefined) {
-          error_msg = jsonObj['error_msg'];
-        }
-        var request_id = 'Unknown';
-        if (jsonObj['error_msg'] !== undefined) {
-          request_id = jsonObj['request_id'];
-        }
-        errObj = new Error('Push error code: ' + error_code + ', error msg: ' + error_msg + ', request id: ' + request_id);
+        errObj = new Error(jsonObj);
       }
       callback(errObj, jsonObj);
     });
@@ -206,7 +195,6 @@ Push.prototype.pushMsg = function (options, callback) {
     callback && callback(null, result);
   });
 }
-
 Push.prototype.setTag = function (options, callback) {
   var self = this;
   var option = {};
