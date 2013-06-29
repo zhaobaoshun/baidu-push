@@ -230,4 +230,76 @@ Push.prototype.setTag = function (options, callback) {
   });
 }
 
+Push.prototype.fetchTag = function (options, callback) {
+  var self = this;
+  var option = {};
+  if (typeof options === 'function' && arguments.length === 1) {
+    callback = options;
+    options = {}
+  }
+
+  if (!options) {
+    options = {}
+  }
+
+  for (var i in options) {
+    if (options.hasOwnProperty(i)) {
+      option[i] = options[i];
+    }
+  }
+
+  var path = COMMON_PATH + 'channel';
+
+  option['method'] = 'fetch_tag';
+  option['apikey'] = self.ak;
+  option['timestamp'] = getTimestamp();
+
+  option = sortObject(option);
+  var wrap_id = {request_id: null};
+  request(option, path, self.sk, wrap_id, self.host, function (err, result) {
+    self.request_id = wrap_id.request_id;
+    if (err) {
+      callback && callback(err);
+      return;
+    }
+    callback && callback(null, result);
+  });
+}
+
+Push.prototype.deleteTag = function (options, callback) {
+  var self = this;
+  var option = {};
+  if (typeof options === 'function' && arguments.length === 1) {
+    callback = options;
+    options = {}
+  }
+
+  if (!options) {
+    options = {}
+  }
+
+  for (var i in options) {
+    if (options.hasOwnProperty(i)) {
+      option[i] = options[i];
+    }
+  }
+
+  var path = COMMON_PATH + 'channel';
+
+  option['method'] = 'delete_tag';
+  option['apikey'] = self.ak;
+  option['timestamp'] = getTimestamp();
+
+  option = sortObject(option);
+  var wrap_id = {request_id: null};
+  request(option, path, self.sk, wrap_id, self.host, function (err, result) {
+    self.request_id = wrap_id.request_id;
+    if (err) {
+      callback && callback(err);
+      return;
+    }
+    callback && callback(null, result);
+  });
+}
+
 module.exports = Push;
