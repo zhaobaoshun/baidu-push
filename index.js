@@ -44,7 +44,6 @@ function generateSign(method, url, params, secretKey) {
   baseString += secretKey;
   //var encodeString = encodeURIComponent(baseString);
   var encodeString = urlencode(baseString);
-
   var md5sum = crypto.createHash('md5');
   md5sum.update(encodeString);
 
@@ -164,7 +163,7 @@ Push.prototype.queryBindList = function (options, callback) {
     callback && callback(null, result);
   });
 }
-Push.prototype.pushMsg = function (options, callback) {
+Push.prototype.pushMessage = function (options, callback) {
   var self = this;
   var option = {};
   if (typeof options === 'function' && arguments.length === 1) {
