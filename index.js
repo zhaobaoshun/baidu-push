@@ -3,6 +3,7 @@ var assert = require('assert');
 var crypto = require('crypto');
 var http = require('http');
 var querystring = require('querystring');
+
 var PROTOCOL_SCHEMA = 'http://';
 var SERVER_HOST = 'channel.api.duapp.com';
 var COMMON_PATH = '/rest/2.0/channel/';
@@ -10,14 +11,14 @@ var COMMON_PATH = '/rest/2.0/channel/';
 function urlencode (string) {
   // http://kevin.vanzonneveld.net
   string = (string + '').toString();
-  // Tilde should be allowed unescaped in future versions of PHP (as reflected below), but if you want to reflect current
-  // PHP behavior, you would need to add ".replace(/~/g, '%7E');" to the following.
   return encodeURIComponent(string).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
 }
+
 function getTimestamp() {
   var timestamp = Math.floor(new Date().getTime() / 1000);
   return timestamp;
 }
+
 function sortObject(originObject) {
   var index = [];
   var tempObject = {};
@@ -34,6 +35,7 @@ function sortObject(originObject) {
   }
   return tempObject;
 }
+
 function generateSign(method, url, params, secretKey) {
   var baseString = method + url;
 
@@ -50,6 +52,7 @@ function generateSign(method, url, params, secretKey) {
   var sign = md5sum.digest('hex');
   return sign;
 }
+
 function request(bodyArgs, path, sk, id, host, callback) {
   assert.ok(bodyArgs.method);
   assert.ok(path);
@@ -104,6 +107,7 @@ function request(bodyArgs, path, sk, id, host, callback) {
   req.write(bodyStr);
   req.end();
 }
+
 function Push(options) {
   var self = this;
   var option = {
@@ -129,17 +133,16 @@ function Push(options) {
   self.host = option.host;
   self.request_id = null;
 }
+
 Push.prototype.queryBindList = function (options, callback) {
   var self = this;
   var option = {};
   if (typeof options === 'function' && arguments.length === 1) {
     callback = options;
-    options = {}
+    options = {};
   }
 
-  if (!options) {
-    options = {}
-  }
+  if (!options) options = {};
 
   for (var i in options) {
     if (options.hasOwnProperty(i)) {
@@ -168,7 +171,7 @@ Push.prototype.pushMessage = function (options, callback) {
   var option = {};
   if (typeof options === 'function' && arguments.length === 1) {
     callback = options;
-    options = {}
+    options = {};
   }
 
   if (!options) options = {};
@@ -182,9 +185,11 @@ Push.prototype.pushMessage = function (options, callback) {
   option['method'] = 'push_msg';
   option['apikey'] = self.ak;
   option['timestamp'] = getTimestamp();
+
   option = sortObject(option);
 
   var wrap_id = {request_id: null};
+
   request(option, path, self.sk, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
@@ -202,9 +207,7 @@ Push.prototype.setTag = function (options, callback) {
     options = {};
   }
 
-  if (!options) {
-    options = {};
-  }
+  if (!options) options = {};
 
   for (var i in options) {
     if (options.hasOwnProperty(i)) {
@@ -217,9 +220,11 @@ Push.prototype.setTag = function (options, callback) {
   option['method'] = 'set_tag';
   option['apikey'] = self.ak;
   option['timestamp'] = getTimestamp();
+
   option = sortObject(option);
 
   var wrap_id = {request_id: null};
+
   request(option, path, self.sk, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
@@ -235,12 +240,10 @@ Push.prototype.fetchTag = function (options, callback) {
   var option = {};
   if (typeof options === 'function' && arguments.length === 1) {
     callback = options;
-    options = {}
+    options = {};
   }
 
-  if (!options) {
-    options = {}
-  }
+  if (!options) options = {};
 
   for (var i in options) {
     if (options.hasOwnProperty(i)) {
@@ -255,7 +258,9 @@ Push.prototype.fetchTag = function (options, callback) {
   option['timestamp'] = getTimestamp();
 
   option = sortObject(option);
+
   var wrap_id = {request_id: null};
+
   request(option, path, self.sk, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
@@ -271,12 +276,10 @@ Push.prototype.deleteTag = function (options, callback) {
   var option = {};
   if (typeof options === 'function' && arguments.length === 1) {
     callback = options;
-    options = {}
+    options = {};
   }
 
-  if (!options) {
-    options = {}
-  }
+  if (!options) options = {};
 
   for (var i in options) {
     if (options.hasOwnProperty(i)) {
@@ -291,7 +294,9 @@ Push.prototype.deleteTag = function (options, callback) {
   option['timestamp'] = getTimestamp();
 
   option = sortObject(option);
+
   var wrap_id = {request_id: null};
+
   request(option, path, self.sk, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {

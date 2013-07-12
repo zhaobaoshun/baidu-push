@@ -1,11 +1,12 @@
 
 var userId = '644038823502246388';
-var Push = require('./push');
+var Push = require('../index');
 
 var opt = {
   ak: '',
   sk: ''
 }
+
 var client = new Push(opt);
 
 var option = {
@@ -14,6 +15,7 @@ var option = {
   messages: JSON.stringify(["中国人发了@124589"]),
   msg_keys: JSON.stringify(["title"])
 }
+
 client.pushMsg(option, function(error, result) {
   if (error) {
     console.log(error);
