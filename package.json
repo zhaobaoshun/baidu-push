@@ -19,5 +19,14 @@
   "author": "haoxin",
   "license": "BSD",
   "readmeFilename": "README.md",
-  "gitHead": "328e94c4de46f376844d2b57ed11cb9aee098307"
+  "gitHead": "328e94c4de46f376844d2b57ed11cb9aee098307",
+  "devDependencies": {
+    "should": "~1.2.2"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "should": "~1.2.2"
+  }
 }

@@ -59,16 +59,16 @@ function request(bodyArgs, path, secretKey, id, host, callback) {
   for (var i in bodyArgs) {
     if (bodyArgs.hasOwnProperty(i)) {
       bodyArgsArray.push(i + '=' + urlencode(bodyArgs[i]));
-      }
+    }
   }
-  var bodyStr = bodyArgsArray.join('&');
 
+  var bodyString = bodyArgsArray.join('&');
   var options = {
     host: host,
     method: 'POST',
     path: path,
     headers: {
-      'Content-Length': bodyStr.length,
+      'Content-Length': bodyString.length,
       'Content-Type':'application/x-www-form-urlencoded'
     }
   };
@@ -96,10 +96,10 @@ function request(bodyArgs, path, secretKey, id, host, callback) {
   });
 
   req.on('error', function (e) {
-    console.log('error : ' + util.inspect(e));
+    console.log('error: ' + util.inspect(e));
     callback(e, null);
   });
-  req.write(bodyStr);
+  req.write(bodyString);
   req.end();
 }
 
@@ -155,6 +155,7 @@ Push.prototype.queryBindList = function (options, callback) {
   request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
+      console.log(result);
       callback && callback(err);
       return;
     }
@@ -223,6 +224,7 @@ Push.prototype.setTag = function (options, callback) {
   request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
+      console.log(result);
       callback && callback(err);
       return;
     }
@@ -259,6 +261,7 @@ Push.prototype.fetchTag = function (options, callback) {
   request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
+      console.log(result);
       callback && callback(err);
       return;
     }
@@ -295,6 +298,7 @@ Push.prototype.deleteTag = function (options, callback) {
   request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
+      console.log(result);
       callback && callback(err);
       return;
     }
