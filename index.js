@@ -1,5 +1,4 @@
 var util = require('util');
-var assert = require('assert');
 var crypto = require('crypto');
 var http = require('http');
 var querystring = require('querystring');
@@ -53,12 +52,8 @@ function generateSign(method, url, params, secretKey) {
   return sign;
 }
 
-function request(bodyArgs, path, sk, id, host, callback) {
-  assert.ok(bodyArgs.method);
-  assert.ok(path);
-  assert.ok(sk);
-
-  bodyArgs.sign = generateSign('POST', PROTOCOL_SCHEMA + host + path, bodyArgs, sk);
+function request(bodyArgs, path, secretKey, id, host, callback) {
+  bodyArgs.sign = generateSign('POST', PROTOCOL_SCHEMA + host + path, bodyArgs, secretKey);
 
   var bodyArgsArray = [];
   for (var i in bodyArgs) {
@@ -111,8 +106,8 @@ function request(bodyArgs, path, sk, id, host, callback) {
 function Push(options) {
   var self = this;
   var option = {
-    ak: process.env.BAE_ENV_AK,
-    sk: process.env.BAE_ENV_SK,
+    apiKey: process.env.BAE_ENV_AK,
+    secretKey: process.env.BAE_ENV_SK,
     host: process.env.BAE_ENV_ADDR_CHANNEL || SERVER_HOST
   }
 
@@ -122,14 +117,14 @@ function Push(options) {
         if (typeof options[i] === 'string') {
           option[i] = options[i];
         } else {
-          throw new Error('Invalid ak, sk, or counter host')
+          throw new Error('Invalid apiKey, secretKey, or counter host')
         }
       }
     }
   }
 
-  self.ak = option.ak;
-  self.sk = option.sk;
+  self.apiKey = option.apiKey;
+  self.secretKey = option.secretKey;
   self.host = option.host;
   self.request_id = null;
 }
@@ -152,12 +147,12 @@ Push.prototype.queryBindList = function (options, callback) {
 
   var path = COMMON_PATH + (options['channel_id'] || 'channel');
   option['method'] = 'query_bindlist';
-  option['apikey'] = self.ak;
+  option['apikey'] = self.apiKey;
   option['timestamp'] = getTimestamp();
   option = sortObject(option);
 
   var wrap_id = {request_id: null};
-  request(option, path, self.sk, wrap_id, self.host, function (err, result) {
+  request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
       callback && callback(err);
@@ -183,16 +178,16 @@ Push.prototype.pushMessage = function (options, callback) {
   var path = COMMON_PATH + 'channel';
 
   option['method'] = 'push_msg';
-  option['apikey'] = self.ak;
+  option['apikey'] = self.apiKey;
   option['timestamp'] = getTimestamp();
 
   option = sortObject(option);
 
   var wrap_id = {request_id: null};
-
-  request(option, path, self.sk, wrap_id, self.host, function (err, result) {
+  request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
+      console.log(result);
       callback && callback(err);
       return;
     }
@@ -218,14 +213,14 @@ Push.prototype.setTag = function (options, callback) {
   var path = COMMON_PATH + 'channel';
 
   option['method'] = 'set_tag';
-  option['apikey'] = self.ak;
+  option['apikey'] = self.apiKey;
   option['timestamp'] = getTimestamp();
 
   option = sortObject(option);
 
   var wrap_id = {request_id: null};
 
-  request(option, path, self.sk, wrap_id, self.host, function (err, result) {
+  request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
       callback && callback(err);
@@ -254,14 +249,14 @@ Push.prototype.fetchTag = function (options, callback) {
   var path = COMMON_PATH + 'channel';
 
   option['method'] = 'fetch_tag';
-  option['apikey'] = self.ak;
+  option['apikey'] = self.apiKey;
   option['timestamp'] = getTimestamp();
 
   option = sortObject(option);
 
   var wrap_id = {request_id: null};
 
-  request(option, path, self.sk, wrap_id, self.host, function (err, result) {
+  request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
       callback && callback(err);
@@ -290,14 +285,14 @@ Push.prototype.deleteTag = function (options, callback) {
   var path = COMMON_PATH + 'channel';
 
   option['method'] = 'delete_tag';
-  option['apikey'] = self.ak;
+  option['apikey'] = self.apiKey;
   option['timestamp'] = getTimestamp();
 
   option = sortObject(option);
 
   var wrap_id = {request_id: null};
 
-  request(option, path, self.sk, wrap_id, self.host, function (err, result) {
+  request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
       callback && callback(err);

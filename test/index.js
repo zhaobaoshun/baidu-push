@@ -1,26 +1,22 @@
-
-var userId = '644038823502246388';
+var userId = '777114815379377151';
 var Push = require('../index');
 
-var opt = {
-  ak: '',
-  sk: ''
+var pushOption = {
+  apiKey: 'QXVY0KI8BevmfdOK',
+  secretKey: 'Oc3E0FjEaVhRZq43JQy2sBLc2p0l5s'
 }
 
-var client = new Push(opt);
+var client = new Push(pushOption);
 
-var option = {
+var pushMessageOption = {
   push_type: 1,
   user_id: userId,
-  messages: JSON.stringify(["中国人发了@124589"]),
+  messages: JSON.stringify(["hello"]),
   msg_keys: JSON.stringify(["title"])
 }
 
-client.pushMsg(option, function(error, result) {
-  if (error) {
-    console.log(error);
-    return;
-  }
+client.pushMessage(pushMessageOption, function(error, result) {
+  if (error) console.log(error);
   console.log(result);
 })
 
