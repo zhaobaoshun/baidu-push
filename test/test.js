@@ -1,11 +1,11 @@
 var should = require('should');
 
-var userId = '777114815379377151';
+var userId = 'a userId';
 var Push = require('../index');
 
 var pushOption = {
-  apiKey: 'gCRSnFvAvWGu3B9yATYt4vTa',
-  secretKey: 'RVSSPAYLGMtORyoqoeeZbUGEeXk31IkG'
+  apiKey: 'your api key',
+  secretKey: 'your secret key'
 }
 
 var client = new Push(pushOption);
