@@ -1,0 +1,32 @@
+{
+  "name": "baidu-push",
+  "version": "0.0.3",
+  "description": "node.js sdk for baidu push service",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/coderhaoxin/baidu-push.git"
+  },
+  "keywords": [
+    "baidu",
+    "push",
+    "service",
+    "app"
+  ],
+  "author": "haoxin",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "328e94c4de46f376844d2b57ed11cb9aee098307",
+  "devDependencies": {
+    "should": "~1.2.2"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "should": "~1.2.2"
+  }
+}
