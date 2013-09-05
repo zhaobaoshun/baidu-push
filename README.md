@@ -1,6 +1,9 @@
 ### baidu-push
 
 node.js sdk for baidu push service
+```bash
+npm install baidu-push
+```
 
 ### 百度云推送
 
