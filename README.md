@@ -10,11 +10,12 @@ npm install baidu-push
 ### 使用
 * [参考代码](test/test.js)
 
-* 文档(稍后完善)
+* 文档
 
 ```js
-var userId = 'a userId';
 var Push = require('baidu-push');
+
+var userId = 'a userId';
 
 var pushOption = {
   apiKey: 'your api key',
@@ -24,6 +25,7 @@ var pushOption = {
 var client = new Push(pushOption);
 ```
 ```js
+//根据userId向某一user推送消息
 var option = {
   push_type: 1,
   user_id: userId,
@@ -36,31 +38,7 @@ client.pushMessage(option, function(error, result) {
 })
 ```
 ```js
-var option = {
-  user_id: userId
-}
-client.fetchTag(option, function(error, result) {
-  if (error) return console.log(error);
-})
-```
-```js
-var option = {
-  tag: testTag.name,
-  user_id: userId
-}
-client.setTag(option, function(error, result) {
-  if (error) return console.log(error);
-})
-```
-```js
-var option = {
-  user_id: userId
-}
-client.fetchTag(option, function(error, result) {
-  if (error) return console.log(error);
-})
-```
-```js
+//向拥有tag的users发送消息
 var option = {
   push_type: 2,
   tag: testTag.name,
@@ -72,6 +50,26 @@ client.pushMessage(option, function(error, result) {
 })
 ```
 ```js
+//添加user的tag
+var option = {
+  tag: testTag.name,
+  user_id: userId
+}
+client.setTag(option, function(error, result) {
+  if (error) return console.log(error);
+})
+```
+```js
+//获取user的tag
+var option = {
+  user_id: userId
+}
+client.fetchTag(option, function(error, result) {
+  if (error) return console.log(error);
+})
+```
+```js
+//删除user的tag
 var option = {
   tag: testTag.name,
   user_id: userId
