@@ -25,7 +25,7 @@ var pushOption = {
 var client = new Push(pushOption);
 ```
 ```js
-//根据userId向某一user推送消息
+//根据 userId 向某一 user 推送消息
 var option = {
   push_type: 1,
   user_id: userId,
@@ -38,7 +38,7 @@ client.pushMessage(option, function(error, result) {
 })
 ```
 ```js
-//向拥有tag的users发送消息
+//根据 tag 向一群 users 推送消息
 var option = {
   push_type: 2,
   tag: testTag.name,
