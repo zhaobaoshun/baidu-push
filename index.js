@@ -8,9 +8,10 @@ var SERVER_HOST = 'channel.api.duapp.com';
 var COMMON_PATH = '/rest/2.0/channel/';
 
 function urlencode (string) {
-  // http://kevin.vanzonneveld.net
   string = (string + '').toString();
-  return encodeURIComponent(string).replace(/!/g, '%21').replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29').replace(/\*/g, '%2A').replace(/%20/g, '+');
+  return encodeURIComponent(string).replace(/!/g, '%21').replace(/'/g, '%27')
+                                   .replace(/\(/g, '%28').replace(/\)/g, '%29')
+                                   .replace(/\*/g, '%2A').replace(/%20/g, '+');
 }
 
 function getTimestamp() {
@@ -53,6 +54,7 @@ function generateSign(method, url, params, secretKey) {
 }
 
 function request(bodyArgs, path, secretKey, id, host, callback) {
+  callback = callback || function () {};
   bodyArgs.sign = generateSign('POST', PROTOCOL_SCHEMA + host + path, bodyArgs, secretKey);
 
   var bodyArgsArray = [];
@@ -83,8 +85,7 @@ function request(bodyArgs, path, secretKey, id, host, callback) {
       try {
         var jsonObj = JSON.parse(resBody);
       } catch(e) {
-        callback && callback(e);
-        return;
+        return callback(e);
       }
       var errObj = null;
       id.request_id = jsonObj['request_id'];
@@ -96,7 +97,6 @@ function request(bodyArgs, path, secretKey, id, host, callback) {
   });
 
   req.on('error', function (e) {
-    console.log('error: ' + util.inspect(e));
     callback(e, null);
   });
   req.write(bodyString);
@@ -132,12 +132,7 @@ function Push(options) {
 Push.prototype.queryBindList = function (options, callback) {
   var self = this;
   var option = {};
-  if (typeof options === 'function' && arguments.length === 1) {
-    callback = options;
-    options = {};
-  }
-
-  if (!options) options = {};
+  callback = callback || function () {};
 
   for (var i in options) {
     if (options.hasOwnProperty(i)) {
@@ -155,22 +150,15 @@ Push.prototype.queryBindList = function (options, callback) {
   request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
-      console.log(result);
-      callback && callback(err);
-      return;
+      return callback(err, result);
     }
-    callback && callback(null, result);
+    return callback(null, result);
   });
 }
 Push.prototype.pushMessage = function (options, callback) {
   var self = this;
   var option = {};
-  if (typeof options === 'function' && arguments.length === 1) {
-    callback = options;
-    options = {};
-  }
-
-  if (!options) options = {};
+  callback = callback || function () {};
 
   for (var i in options) {
     if (options.hasOwnProperty(i)) option[i] = options[i];
@@ -188,22 +176,15 @@ Push.prototype.pushMessage = function (options, callback) {
   request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
-      console.log(result);
-      callback && callback(err);
-      return;
+      return callback(err, result);
     }
-    callback && callback(null, result);
+    return callback(null, result);
   });
 }
 Push.prototype.setTag = function (options, callback) {
   var self = this;
   var option = {};
-  if (typeof options === 'function' && arguments.length === 1) {
-    callback = options;
-    options = {};
-  }
-
-  if (!options) options = {};
+  callback = callback || function () {};
 
   for (var i in options) {
     if (options.hasOwnProperty(i)) {
@@ -224,23 +205,16 @@ Push.prototype.setTag = function (options, callback) {
   request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
-      console.log(result);
-      callback && callback(err);
-      return;
+      return callback(err, result);
     }
-    callback && callback(null, result);
+    return callback(null, result);
   });
 }
 
 Push.prototype.fetchTag = function (options, callback) {
   var self = this;
   var option = {};
-  if (typeof options === 'function' && arguments.length === 1) {
-    callback = options;
-    options = {};
-  }
-
-  if (!options) options = {};
+  callback = callback || function () {};
 
   for (var i in options) {
     if (options.hasOwnProperty(i)) {
@@ -261,23 +235,16 @@ Push.prototype.fetchTag = function (options, callback) {
   request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
-      console.log(result);
-      callback && callback(err);
-      return;
+      return callback(err, result);
     }
-    callback && callback(null, result);
+    return callback(null, result);
   });
 }
 
 Push.prototype.deleteTag = function (options, callback) {
   var self = this;
   var option = {};
-  if (typeof options === 'function' && arguments.length === 1) {
-    callback = options;
-    options = {};
-  }
-
-  if (!options) options = {};
+  callback = callback || function () {};
 
   for (var i in options) {
     if (options.hasOwnProperty(i)) {
@@ -298,11 +265,9 @@ Push.prototype.deleteTag = function (options, callback) {
   request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
     self.request_id = wrap_id.request_id;
     if (err) {
-      console.log(result);
-      callback && callback(err);
-      return;
+      return callback(err, result);
     }
-    callback && callback(null, result);
+    return callback(null, result);
   });
 }
 

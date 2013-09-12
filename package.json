@@ -1,6 +1,6 @@
 {
   "name": "baidu-push",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "node.js sdk for baidu push service",
   "main": "index.js",
   "scripts": {
@@ -13,8 +13,10 @@
   "keywords": [
     "baidu",
     "push",
+    "notification",
     "service",
-    "app"
+    "app",
+    "cloud"
   ],
   "author": "haoxin",
   "license": "BSD",
@@ -26,7 +28,5 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {
-    "should": "~1.2.2"
-  }
+  "dependencies": {}
 }
