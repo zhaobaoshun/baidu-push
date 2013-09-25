@@ -31,8 +31,8 @@ var client = new Push(pushOption);
 var option = {
   push_type: 1,
   user_id: userId,
-  messages: JSON.stringify(["hello"]),
-  msg_keys: JSON.stringify(["title"])
+  messages: ["hello"],//if version <= 0.03; should use: JSON.stringify(["hello"])
+  msg_keys: ["title"] //if version <= 0.03; should use: JSON.stringify(["title"])
 }
 
 client.pushMessage(option, function(error, result) {
@@ -45,8 +45,8 @@ client.pushMessage(option, function(error, result) {
 var option = {
   push_type: 2,
   tag: testTag.name,
-  messages: JSON.stringify(["push by tag"]),
-  msg_keys: JSON.stringify(["title"])
+  messages: ["push by tag"],//if version <= 0.03; should use: JSON.stringify(["push by tag"])
+  msg_keys: ["title"]       //if version <= 0.03; should use: JSON.stringify(["title"])
 }
 client.pushMessage(option, function(error, result) {
   if (error) return console.log(error);

@@ -160,6 +160,13 @@ Push.prototype.pushMessage = function (options, callback) {
   var option = {};
   callback = callback || function () {};
 
+  if (typeof(options.messages) !== 'string') {//兼容旧版本
+    options.messages = JSON.stringify(options.messages);
+  }
+  if (typeof(options.msg_keys) !== 'string') {
+    options.msg_keys = JSON.stringify(options.msg_keys);
+  }
+
   for (var i in options) {
     if (options.hasOwnProperty(i)) option[i] = options[i];
   }

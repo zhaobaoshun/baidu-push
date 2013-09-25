@@ -18,6 +18,21 @@ describe('test baidu push', function () {
     var option = {
       push_type: 1,
       user_id: userId,
+      messages: ["hello"],
+      msg_keys: ["title"]
+    }
+
+    client.pushMessage(option, function(error, result) {
+      if (error) console.log(error);
+      result.response_params.success_amount.should.equal(1);
+      done();
+    })
+  })
+
+  it('should push message success(old api should work)', function (done) {
+    var option = {
+      push_type: 1,
+      user_id: userId,
       messages: JSON.stringify(["hello"]),
       msg_keys: JSON.stringify(["title"])
     }
@@ -78,6 +93,20 @@ describe('test baidu push', function () {
   })
 
   it('should push message by tag', function (done) {
+    var option = {
+      push_type: 2,
+      tag: testTag.name,
+      messages: ["push by tag"],
+      msg_keys: ["title"]
+    }
+    client.pushMessage(option, function(error, result) {
+      if (error) return console.log(error);
+      result.response_params.success_amount.should.equal(1);
+      done();
+    })
+  })
+
+  it('should push message by tag(old api should work)', function (done) {
     var option = {
       push_type: 2,
       tag: testTag.name,
