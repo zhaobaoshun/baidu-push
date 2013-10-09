@@ -1,12 +1,12 @@
 var should = require('should');
 
-// var userId = 'a userId';
-var userId = '1100296236057070489'
+var userId = 'a userId';
+
 var Push = require('../index');
 
 var pushOption = {
-  apiKey: 'gCRSnFvAvWGu3B9yATYt4vTa',//'your api key',
-  secretKey: 'RVSSPAYLGMtORyoqoeeZbUGEeXk31IkG'//'your secret key'
+  apiKey: 'your api key',
+  secretKey: 'your secret key'
 }
 
 var client = new Push(pushOption);
@@ -66,10 +66,29 @@ describe('test baidu push', function () {
     })
   })
 
-  it('should fetch all tags', function (done) {
+  it('should query user tag', function (done) {
     var option = {
       user_id: userId
     }
+
+    client.queryUserTag(option, function (error, result) {
+      if (error) console.log(error);
+
+      result.response_params.tag_num.should.above(-1);
+      var tags = result.response_params.tags;
+      var flag = 0;
+      tags.forEach(function (tag) {
+        if (tag.name === testTag.name) {
+          flag++;
+        }
+      })
+      flag.should.equal(1);
+      done();
+    })
+  })
+
+  it('should fetch all tags', function (done) {
+    var option = {};
 
     client.fetchTag(option, function (error, result) {
       if (error) console.log(error);

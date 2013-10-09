@@ -11,8 +11,6 @@ npm install baidu-push
 ### 使用
 * [参考代码](test/test.js)
 
-* 文档
-
 ```js
 var Push = require('baidu-push');
 
@@ -69,9 +67,7 @@ client.setTag(option, function(error, result) {
 var option = {
   user_id: userId
 }
-client.fetchTag(option, function(error, result) {
-  if (error) return console.log(error);
-})
+client.queryUserTag(option, function (error, result) {})
 ```
 
 删除user的tag
@@ -80,16 +76,17 @@ var option = {
   tag: testTag.name,
   user_id: userId
 }
-client.deleteTag(option, function(error, result) {
-  if (error) return console.log(error);
-})
+client.deleteTag(option, function(error, result) {})
+```
+
+获取app的tag
+```js
+client.fetchTag({}, function (error, result) {})
 ```
 
 ```js
 var option = {
   user_id: userId
 }
-client.queryBindList(option, function(error, result) {
-  if (error) return console.log(error);
-})
+client.queryBindList(option, function(error, result) {})
 ```
