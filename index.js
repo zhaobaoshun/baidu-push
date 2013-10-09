@@ -181,7 +181,6 @@ Push.prototype.setTag = function (options, callback) {
     return callback(null, result);
   });
 }
-
 Push.prototype.fetchTag = function (options, callback) {
   callback   = callback || function () {};
   var path   = COMMON_PATH + 'channel';
@@ -206,7 +205,30 @@ Push.prototype.fetchTag = function (options, callback) {
     return callback(null, result);
   });
 }
+Push.prototype.queryUserTag = function (options, callback) {
+  callback   = callback || function () {};
+  var path   = COMMON_PATH + 'channel';
+  var self   = this;
+  var option = {};
 
+  for (var i in options) {
+    if (options.hasOwnProperty(i)) { option[i] = options[i]; }
+  }
+
+  option['method']    = 'query_user_tags';
+  option['apikey']    = self.apiKey;
+  option['timestamp'] = getTimestamp();
+  option              = sortObject(option);
+
+  var wrap_id = { request_id: null };
+  request(option, path, self.secretKey, wrap_id, self.host, function (err, result) {
+    self.request_id = wrap_id.request_id;
+    if (err) {
+      return callback(err, result);
+    }
+    return callback(null, result);
+  });
+}
 Push.prototype.deleteTag = function (options, callback) {
   callback   = callback || function () {};
   var path   = COMMON_PATH + 'channel';
