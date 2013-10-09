@@ -1,11 +1,12 @@
 var should = require('should');
 
-var userId = 'a userId';
+// var userId = 'a userId';
+var userId = '1100296236057070489'
 var Push = require('../index');
 
 var pushOption = {
-  apiKey: 'your api key',
-  secretKey: 'your secret key'
+  apiKey: 'gCRSnFvAvWGu3B9yATYt4vTa',//'your api key',
+  secretKey: 'RVSSPAYLGMtORyoqoeeZbUGEeXk31IkG'//'your secret key'
 }
 
 var client = new Push(pushOption);
@@ -22,7 +23,7 @@ describe('test baidu push', function () {
       msg_keys: ["title"]
     }
 
-    client.pushMessage(option, function(error, result) {
+    client.pushMessage(option, function (error, result) {
       if (error) console.log(error);
       result.response_params.success_amount.should.equal(1);
       done();
@@ -37,27 +38,16 @@ describe('test baidu push', function () {
       msg_keys: JSON.stringify(["title"])
     }
 
-    client.pushMessage(option, function(error, result) {
+    client.pushMessage(option, function (error, result) {
       if (error) console.log(error);
       result.response_params.success_amount.should.equal(1);
       done();
     })
   })
 
-  it('should fetch user tag', function (done) {
-    var option = {
-      user_id: userId
-    }
-    client.fetchTag(option, function(error, result) {
-      if (error) return console.log(error);
-      result.response_params.total_num.should.above(-1);
-      done();
-    })
-  })
-
-  it('should fetch all tag', function (done) {
-    client.fetchTag({}, function(error, result) {
-      if (error) return console.log(error);
+  it('should fetch all tags', function (done) {
+    client.fetchTag({}, function (error, result) {
+      if (error) console.log(error);
       result.response_params.total_num.should.above(-1);
       done();
     })
@@ -68,18 +58,22 @@ describe('test baidu push', function () {
       tag: testTag.name,
       user_id: userId
     }
-    client.setTag(option, function(error, result) {
-      if (error) return console.log(error);
+
+    client.setTag(option, function (error, result) {
+      if (error) console.log(error);
+      result.request_id.should.above(0);
       done();
     })
   })
 
-  it('should fetch user tag', function (done) {
+  it('should fetch all tags', function (done) {
     var option = {
       user_id: userId
     }
-    client.fetchTag(option, function(error, result) {
-      if (error) return console.log(error);
+
+    client.fetchTag(option, function (error, result) {
+      if (error) console.log(error);
+
       result.response_params.total_num.should.above(0);
       var tags = result.response_params.tags;
       tags.forEach(function (tag) {
@@ -99,8 +93,9 @@ describe('test baidu push', function () {
       messages: ["push by tag"],
       msg_keys: ["title"]
     }
-    client.pushMessage(option, function(error, result) {
-      if (error) return console.log(error);
+
+    client.pushMessage(option, function (error, result) {
+      if (error) console.log(error);
       result.response_params.success_amount.should.equal(1);
       done();
     })
@@ -113,8 +108,9 @@ describe('test baidu push', function () {
       messages: JSON.stringify(["push by tag"]),
       msg_keys: JSON.stringify(["title"])
     }
-    client.pushMessage(option, function(error, result) {
-      if (error) return console.log(error);
+
+    client.pushMessage(option, function (error, result) {
+      if (error) console.log(error);
       result.response_params.success_amount.should.equal(1);
       done();
     })
@@ -125,28 +121,63 @@ describe('test baidu push', function () {
       tag: testTag.name,
       user_id: userId
     }
-    client.deleteTag(option, function(error, result) {
-      if (error) return console.log(error);
+
+    client.deleteTag(option, function (error, result) {
+      if (error) console.log(error);
+      result.request_id.should.above(0);
       done();
     })
   })
 
-  it('should fetch user tag', function (done) {
+
+  it('should query user tag', function (done) {
     var option = {
       user_id: userId
     }
-    var flag = 0;
-    client.fetchTag(option, function(error, result) {
-      if (error) return console.log(error);
-      result.response_params.total_num.should.above(-1);
+
+    client.queryUserTag(option, function (error, result) {
+      if (error) console.log(error);
+
+      result.response_params.tag_num.should.above(-1);
       var tags = result.response_params.tags;
-      // console.log(tags)
+      var flag = 0;
       tags.forEach(function (tag) {
         if (tag.name === testTag.name) {
           flag++;
         }
       })
-      // flag.should.equal(0);
+      flag.should.equal(0);
+      done();
+    })
+  })
+
+  it('should delete app tag', function (done) {
+    var option = {
+      tag: testTag.name
+    }
+
+    client.deleteTag(option, function (error, result) {
+      if (error) console.log(error);
+      result.request_id.should.above(0);
+      done();
+    })
+  })
+
+  it('should fetch app tag', function (done) {
+    var option = {};
+
+    client.fetchTag(option, function (error, result) {
+      if (error) console.log(error);
+
+      result.response_params.total_num.should.above(-1);
+      var tags = result.response_params.tags;
+      var flag = 0;
+      tags.forEach(function (tag) {
+        if (tag.name === testTag.name) {
+          flag++;
+        }
+      })
+      flag.should.equal(0);
       done();
     })
   })
@@ -155,9 +186,10 @@ describe('test baidu push', function () {
     var option = {
       user_id: userId
     }
-    client.queryBindList(option, function(error, result) {
-      if (error) return console.log(error);
-      console.log(result);
+
+    client.queryBindList(option, function (error, result) {
+      if (error) console.log(error);
+      result.request_id.should.above(0);
     })
   })
 })
